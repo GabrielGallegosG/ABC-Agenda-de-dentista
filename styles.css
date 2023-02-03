@@ -4,7 +4,7 @@ body {
 }
 .contenedor {
   margin: 0;
-  background: Teal;
+  background: MediumTurquoise;
   display: flex;
   flex-direction: column;
   text-align: center;
