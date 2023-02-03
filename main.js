@@ -36,25 +36,53 @@ function agregarPaciente() {
   ).value;
   const fechaActual = new Date();
 
-  //Validacion de fecha: (Debe ingresar una fecha obligatoriamente)
-  if (fechaUltimaVisita != "") {
-    if (fechaUltimaVisita <= fechaActual) {
-      let paciente = new Paciente(
-        id,
-        nombre,
-        apellidop,
-        apellidom,
-        edad,
-        fechaUltimaVisita,
-        procedimiento
-      );
-      pacientes.push(paciente);
-      console.log("Paciente dado de alta");
+  //Validacion de ID: (Se debe introducir un ID obligatoriamente)
+  if (id != "") {
+    //Validacion de nombre: (Se debe introducir un nombre obligatoriamente)
+    if (nombre != "") {
+      //Validacion de apellido paterno: (Se debe introducir un apellido paterno obligatoriamente)
+      if (apellidop != "") {
+        //Validacion de edad: (Se debe introducir una edad obligatoriamente)
+        if (edad != "") {
+          //Validacion de procedimiento: (Se debe introducir el procedimiento obligatoriamente)
+          if (procedimiento != "") {
+            //Validacion de fecha: (Debe ingresar una fecha obligatoriamente)
+            if (fechaUltimaVisita != "") {
+              //Validacion de fecha: (La fecha ingresada no debe ser posterior a hoy)
+              if (fechaUltimaVisita <= fechaActual) {
+                let paciente = new Paciente(
+                  id,
+                  nombre,
+                  apellidop,
+                  apellidom,
+                  edad,
+                  fechaUltimaVisita,
+                  procedimiento
+                );
+                pacientes.push(paciente);
+                console.log("Paciente dado de alta");
+              } else {
+                alert(
+                  "La fecha de la ultima visita NO puede ser posterior a hoy"
+                );
+              }
+            } else {
+              alert("Ingrese la fecha de la ultima visita");
+            }
+          } else {
+            alert("Se debe introducir el procedimiento obligatoriamente");
+          }
+        } else {
+          alert("No se ha introducido la edad del paciente");
+        }
+      } else {
+        alert("No se ha introducido un apellido paterno");
+      }
     } else {
-      alert("La fecha de la ultima visita NO puede ser posterior a hoy");
+      alert("No se ha introducido un nombre");
     }
   } else {
-    alert("Ingrese la fecha de la ultima visita");
+    alert("No se ha introducido un ID");
   }
 
   id = document.getElementById("input-id").value = "";
