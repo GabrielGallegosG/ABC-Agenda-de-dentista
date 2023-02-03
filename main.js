@@ -167,7 +167,7 @@ function mostrarPacientesPorApellido() {
   let inputApellido = document.getElementById("input-get-apellido").value;
 
   let pacientesFiltrados = pacientes.filter(function (paciente) {
-    return paciente.apellidop === inputApellido;
+    return paciente.apellidop.toLowerCase() === inputApellido.toLowerCase();
   });
 
   let tabla = document.getElementById("tabla-pacientes-apellido");
@@ -225,7 +225,7 @@ function mostrarPacientesPorProcedimiento() {
   ).value;
 
   let pacientesFiltrados = pacientes.filter(function (paciente) {
-    return paciente.procedimiento === procedimiento;
+    return paciente.procedimiento.toLowerCase() === procedimiento.toLowerCase();
   });
 
   let tabla = document.getElementById("tabla-pacientes-procedimiento");
