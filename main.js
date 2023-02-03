@@ -224,55 +224,56 @@ function mostrarPacientesPorProcedimiento() {
     "input-procedimiento-search"
   ).value;
 
-  for (let x = 0; x < pacientes.length; x++) {
-    if (pacientes[x].procedimiento.includes(procedimiento)) {
-      let tabla = document.getElementById("tabla-pacientes-procedimiento");
-      let filas = tabla.getElementsByTagName("tr");
+  let pacientesFiltrados = pacientes.filter(function (paciente) {
+    return paciente.procedimiento === procedimiento;
+  });
 
-      while (filas.length > 1) {
-        tabla.deleteRow(1);
-      }
+  let tabla = document.getElementById("tabla-pacientes-procedimiento");
+  let filas = tabla.getElementsByTagName("tr");
 
-      // Limpiamos la tabla
-      tabla.innerHTML = "";
-
-      // Agregamos la cabecera de la tabla
-      let cabecera = document.createElement("tr");
-      cabecera.innerHTML =
-        "<th>ID</th><th>Apellido paterno</th><th>Apellido materno</th><th>Nombre</th><th>Edad</th><th>Fecha última visita</th><th>Procedimiento</th>";
-      tabla.appendChild(cabecera);
-
-      // Agregamos las filas de la tabla
-      pacientes.forEach(function (paciente) {
-        let fila = document.createElement("tr");
-        fila.innerHTML =
-          "<td>" +
-          paciente.id +
-          "</td>" +
-          "<td>" +
-          paciente.apellidop +
-          "</td>" +
-          "<td>" +
-          paciente.apellidom +
-          "</td>" +
-          "<td>" +
-          paciente.nombre +
-          "</td>" +
-          "<td>" +
-          paciente.edad +
-          "</td>" +
-          "<td>" +
-          paciente.fechaUltimaVisita +
-          "</td>" +
-          "<td>" +
-          paciente.procedimiento +
-          "</td>";
-        tabla.appendChild(fila);
-      });
-    } else {
-      alert("Ningun procedimiento coincide con lo introducido");
-    }
+  while (filas.length > 1) {
+    tabla.deleteRow(1);
   }
+
+  // Limpiamos la tabla
+  tabla.innerHTML = "";
+
+  // Agregamos la cabecera de la tabla
+  let cabecera = document.createElement("tr");
+  cabecera.innerHTML =
+    "<th>ID</th><th>Apellido paterno</th><th>Apellido materno</th><th>Nombre</th><th>Edad</th><th>Fecha última visita</th><th>Procedimiento</th>";
+  tabla.appendChild(cabecera);
+
+  // Agregamos las filas de la tabla
+  pacientesFiltrados.forEach(function (paciente) {
+    let fila = document.createElement("tr");
+    fila.innerHTML =
+      "<td>" +
+      paciente.id +
+      "</td>" +
+      "<td>" +
+      paciente.apellidop +
+      "</td>" +
+      "<td>" +
+      paciente.apellidom +
+      "</td>" +
+      "<td>" +
+      paciente.nombre +
+      "</td>" +
+      "<td>" +
+      paciente.edad +
+      "</td>" +
+      "<td>" +
+      paciente.fechaUltimaVisita +
+      "</td>" +
+      "<td>" +
+      paciente.procedimiento +
+      "</td>";
+    tabla.appendChild(fila);
+  });
+
+  //alert("Ningun procedimiento coincide con lo introducido");
+
   procedimiento = document.getElementById("input-procedimiento-search").value =
     "";
 }
