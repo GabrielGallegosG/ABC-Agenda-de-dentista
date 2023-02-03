@@ -30,22 +30,32 @@ function agregarPaciente() {
   let apellidop = document.getElementById("input-apellidop").value;
   let apellidom = document.getElementById("input-apellidom").value;
   let edad = document.getElementById("input-edad").value;
+  let procedimiento = document.getElementById("input-procedimiento").value;
   let fechaUltimaVisita = document.getElementById(
     "input-fecha-ultima-visita"
   ).value;
-  let procedimiento = document.getElementById("input-procedimiento").value;
+  const fechaActual = new Date();
 
-  let paciente = new Paciente(
-    id,
-    nombre,
-    apellidop,
-    apellidom,
-    edad,
-    fechaUltimaVisita,
-    procedimiento
-  );
-  pacientes.push(paciente);
-  console.log("Paciente dado de alta");
+  //Validacion de fecha: (Debe ingresar una fecha obligatoriamente)
+  if (fechaUltimaVisita != "") {
+    if (fechaUltimaVisita <= fechaActual) {
+      let paciente = new Paciente(
+        id,
+        nombre,
+        apellidop,
+        apellidom,
+        edad,
+        fechaUltimaVisita,
+        procedimiento
+      );
+      pacientes.push(paciente);
+      console.log("Paciente dado de alta");
+    } else {
+      alert("La fecha de la ultima visita NO puede ser posterior a hoy");
+    }
+  } else {
+    alert("Ingrese la fecha de la ultima visita");
+  }
 
   id = document.getElementById("input-id").value = "";
   nombre = document.getElementById("input-nombre").value = "";
@@ -105,15 +115,15 @@ function mostrarPacientes() {
   }
 }
 
-//CONSULTAR PACIENTE POR ID
+//CONSULTAR PACIENTE POR NOMBRE
 function mostrarPacientesPorId() {
-  let id = document.getElementById("input-id-get").value;
+  let nombre = document.getElementById("input-get-nombre").value;
 
   let pacientesFiltrados = pacientes.filter(function (paciente) {
-    return paciente.id === id;
+    return paciente.apellidop === nombre;
   });
 
-  let tabla = document.getElementById("tabla-pacientes-id");
+  let tabla = document.getElementById("tabla-pacientes-nombre");
 
   // Limpiamos la tabla
   tabla.innerHTML = "";
@@ -121,7 +131,7 @@ function mostrarPacientesPorId() {
   // Agregamos la cabecera de la tabla
   let cabecera = document.createElement("tr");
   cabecera.innerHTML =
-  "<th>ID</th><th>Apellido paterno</th><th>Apellido materno</th><th>Nombre</th><th>Edad</th><th>Fecha última visita</th><th>Procedimiento</th>";
+    "<th>ID</th><th>Apellido paterno</th><th>Apellido materno</th><th>Nombre</th><th>Edad</th><th>Fecha última visita</th><th>Procedimiento</th>";
   tabla.appendChild(cabecera);
 
   // Agregamos las filas de la tabla
@@ -155,7 +165,9 @@ function mostrarPacientesPorId() {
 
 //MOSTRAR PACIENTES POR PROCEDIMIENTO
 function mostrarPacientesPorProcedimiento() {
-  let procedimiento = document.getElementById("input-procedimiento-search").value;
+  let procedimiento = document.getElementById(
+    "input-procedimiento-search"
+  ).value;
 
   let pacientesFiltrados = pacientes.filter(function (paciente) {
     return paciente.procedimiento === procedimiento;
