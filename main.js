@@ -225,7 +225,7 @@ function mostrarPacientesPorProcedimiento() {
   ).value;
 
   let pacientesFiltrados = pacientes.filter(function (paciente) {
-    return paciente.procedimiento.toLowerCase() === procedimiento.toLowerCase();
+    return paciente.procedimiento.toLowerCase().indexOf(procedimiento.toLowerCase()) !== -1 ;
   });
 
   let tabla = document.getElementById("tabla-pacientes-procedimiento");
