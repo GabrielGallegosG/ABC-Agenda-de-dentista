@@ -24,9 +24,7 @@ let permiso;
 
 //Validacion de fecha: (La fecha ingresada no debe ser posterior a hoy)
 function validacionFecha() {
-  let inputFecha = document.getElementById(
-    "input-fecha-ultima-visita"
-  );
+  let inputFecha = document.getElementById("input-fecha-ultima-visita");
   let fechaActual = new Date();
   let fechaUltimaVisita = new Date(inputFecha.value);
 
@@ -117,10 +115,15 @@ function agregarPaciente() {
 function mostrarPacientes() {
   // Obtiene el elemento HTML donde se mostrará la tabla
   let tabla = document.getElementById("tabla-pacientes");
+  let filas = tabla.getElementsByTagName("tr");
 
-  while (tabla.firstChild) {
-    tabla.removeChild(tabla.firstChild);
+  while (filas.length > 1) {
+    tabla.deleteRow(1);
   }
+
+  // while (tabla.firstChild) {
+  //   tabla.removeChild(tabla.firstChild);
+  // }
   // Crea una fila para cada paciente en el array
   for (let paciente of pacientes) {
     let fila = document.createElement("tr");
@@ -159,15 +162,20 @@ function mostrarPacientes() {
   }
 }
 
-//CONSULTAR PACIENTE POR NOMBRE
-function mostrarPacientesPorId() {
-  let nombre = document.getElementById("input-get-nombre").value;
+//CONSULTAR PACIENTE POR APELLIDO
+function mostrarPacientesPorApellido() {
+  let inputApellido = document.getElementById("input-get-apellido").value;
 
   let pacientesFiltrados = pacientes.filter(function (paciente) {
-    return paciente.apellidop === nombre;
+    return paciente.apellidop === inputApellido;
   });
 
-  let tabla = document.getElementById("tabla-pacientes-nombre");
+  let tabla = document.getElementById("tabla-pacientes-apellido");
+  let filas = tabla.getElementsByTagName("tr");
+
+  while (filas.length > 1) {
+    tabla.deleteRow(1);
+  }
 
   // Limpiamos la tabla
   tabla.innerHTML = "";
@@ -205,6 +213,9 @@ function mostrarPacientesPorId() {
       "</td>";
     tabla.appendChild(fila);
   });
+
+  // Limpiamos el input
+  inputApellido = document.getElementById("input-get-apellido").value = "";
 }
 
 //MOSTRAR PACIENTES POR PROCEDIMIENTO
@@ -213,13 +224,14 @@ function mostrarPacientesPorProcedimiento() {
     "input-procedimiento-search"
   ).value;
 
-  // let pacientesFiltrados = pacientes.filter(function (paciente) {
-  //   return paciente.procedimiento === procedimiento;
-  // });
-
-  for (let x = 0; x < paciente.length; x++) {
-    if (procedimiento.includes(paciente[x].procedimiento)) {
+  for (let x = 0; x < pacientes.length; x++) {
+    if (pacientes[x].procedimiento.includes(procedimiento)) {
       let tabla = document.getElementById("tabla-pacientes-procedimiento");
+      let filas = tabla.getElementsByTagName("tr");
+
+      while (filas.length > 1) {
+        tabla.deleteRow(1);
+      }
 
       // Limpiamos la tabla
       tabla.innerHTML = "";
@@ -231,7 +243,7 @@ function mostrarPacientesPorProcedimiento() {
       tabla.appendChild(cabecera);
 
       // Agregamos las filas de la tabla
-      pacientesFiltrados.forEach(function (paciente) {
+      pacientes.forEach(function (paciente) {
         let fila = document.createElement("tr");
         fila.innerHTML =
           "<td>" +
@@ -261,6 +273,8 @@ function mostrarPacientesPorProcedimiento() {
       alert("Ningun procedimiento coincide con lo introducido");
     }
   }
+  procedimiento = document.getElementById("input-procedimiento-search").value =
+    "";
 }
 
 //ELIMINAR PACIENTE
@@ -274,4 +288,6 @@ function eliminarPaciente() {
 
   idEliminar = document.getElementById("input-id-eliminar").value = "";
   mostrarPacientes();
+  mostrarPacientesPorApellido();
+  mostrarPacientesPorProcedimiento();
 }
