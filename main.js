@@ -1,5 +1,3 @@
-//const agregarButton = document.getElementById("input-agregar-button".value);
-
 //agregarButton.addEventListener("click", guardarPaciente);
 class Paciente {
   constructor(
@@ -22,6 +20,26 @@ class Paciente {
 }
 
 let pacientes = [];
+let permiso;
+
+//Validacion de fecha: (La fecha ingresada no debe ser posterior a hoy)
+function validacionFecha() {
+  let inputFecha = document.getElementById(
+    "input-fecha-ultima-visita"
+  );
+  let fechaActual = new Date();
+  let fechaUltimaVisita = new Date(inputFecha.value);
+
+  if (fechaUltimaVisita <= fechaActual) {
+    permiso = 1;
+  } else {
+    alert("La fecha de la ultima visita NO puede ser posterior a hoy");
+    fechaUltimaVisita = document.getElementById(
+      "input-fecha-ultima-visita"
+    ).value = "";
+    permiso = 0;
+  }
+}
 
 //AGREGAR PACIENTE
 function agregarPaciente() {
@@ -34,7 +52,6 @@ function agregarPaciente() {
   let fechaUltimaVisita = document.getElementById(
     "input-fecha-ultima-visita"
   ).value;
-  const fechaActual = new Date();
 
   //Validacion de ID: (Se debe introducir un ID obligatoriamente)
   if (id != "") {
@@ -48,8 +65,7 @@ function agregarPaciente() {
           if (procedimiento != "") {
             //Validacion de fecha: (Debe ingresar una fecha obligatoriamente)
             if (fechaUltimaVisita != "") {
-              //Validacion de fecha: (La fecha ingresada no debe ser posterior a hoy)
-              if (fechaUltimaVisita <= fechaActual) {
+              if (permiso === 1) {
                 let paciente = new Paciente(
                   id,
                   nombre,
@@ -61,10 +77,21 @@ function agregarPaciente() {
                 );
                 pacientes.push(paciente);
                 console.log("Paciente dado de alta");
-              } else {
-                alert(
-                  "La fecha de la ultima visita NO puede ser posterior a hoy"
-                );
+
+                id = document.getElementById("input-id").value = "";
+                nombre = document.getElementById("input-nombre").value = "";
+                apellidop = document.getElementById("input-apellidop").value =
+                  "";
+                apellidom = document.getElementById("input-apellidom").value =
+                  "";
+                edad = document.getElementById("input-edad").value = "";
+                fechaUltimaVisita = document.getElementById(
+                  "input-fecha-ultima-visita"
+                ).value = "";
+                procedimiento = document.getElementById(
+                  "input-procedimiento"
+                ).value = "";
+                mostrarPacientes();
               }
             } else {
               alert("Ingrese la fecha de la ultima visita");
@@ -84,17 +111,6 @@ function agregarPaciente() {
   } else {
     alert("No se ha introducido un ID");
   }
-
-  id = document.getElementById("input-id").value = "";
-  nombre = document.getElementById("input-nombre").value = "";
-  apellidop = document.getElementById("input-apellidop").value = "";
-  apellidom = document.getElementById("input-apellidom").value = "";
-  edad = document.getElementById("input-edad").value = "";
-  fechaUltimaVisita = document.getElementById(
-    "input-fecha-ultima-visita"
-  ).value = "";
-  procedimiento = document.getElementById("input-procedimiento").value = "";
-  mostrarPacientes();
 }
 
 //MOSTRAR PACIENTES
@@ -197,48 +213,54 @@ function mostrarPacientesPorProcedimiento() {
     "input-procedimiento-search"
   ).value;
 
-  let pacientesFiltrados = pacientes.filter(function (paciente) {
-    return paciente.procedimiento === procedimiento;
-  });
+  // let pacientesFiltrados = pacientes.filter(function (paciente) {
+  //   return paciente.procedimiento === procedimiento;
+  // });
 
-  let tabla = document.getElementById("tabla-pacientes-procedimiento");
+  for (let x = 0; x < paciente.length; x++) {
+    if (procedimiento.includes(paciente[x].procedimiento)) {
+      let tabla = document.getElementById("tabla-pacientes-procedimiento");
 
-  // Limpiamos la tabla
-  tabla.innerHTML = "";
+      // Limpiamos la tabla
+      tabla.innerHTML = "";
 
-  // Agregamos la cabecera de la tabla
-  let cabecera = document.createElement("tr");
-  cabecera.innerHTML =
-    "<th>ID</th><th>Apellido paterno</th><th>Apellido materno</th><th>Nombre</th><th>Edad</th><th>Fecha última visita</th><th>Procedimiento</th>";
-  tabla.appendChild(cabecera);
+      // Agregamos la cabecera de la tabla
+      let cabecera = document.createElement("tr");
+      cabecera.innerHTML =
+        "<th>ID</th><th>Apellido paterno</th><th>Apellido materno</th><th>Nombre</th><th>Edad</th><th>Fecha última visita</th><th>Procedimiento</th>";
+      tabla.appendChild(cabecera);
 
-  // Agregamos las filas de la tabla
-  pacientesFiltrados.forEach(function (paciente) {
-    let fila = document.createElement("tr");
-    fila.innerHTML =
-      "<td>" +
-      paciente.id +
-      "</td>" +
-      "<td>" +
-      paciente.apellidop +
-      "</td>" +
-      "<td>" +
-      paciente.apellidom +
-      "</td>" +
-      "<td>" +
-      paciente.nombre +
-      "</td>" +
-      "<td>" +
-      paciente.edad +
-      "</td>" +
-      "<td>" +
-      paciente.fechaUltimaVisita +
-      "</td>" +
-      "<td>" +
-      paciente.procedimiento +
-      "</td>";
-    tabla.appendChild(fila);
-  });
+      // Agregamos las filas de la tabla
+      pacientesFiltrados.forEach(function (paciente) {
+        let fila = document.createElement("tr");
+        fila.innerHTML =
+          "<td>" +
+          paciente.id +
+          "</td>" +
+          "<td>" +
+          paciente.apellidop +
+          "</td>" +
+          "<td>" +
+          paciente.apellidom +
+          "</td>" +
+          "<td>" +
+          paciente.nombre +
+          "</td>" +
+          "<td>" +
+          paciente.edad +
+          "</td>" +
+          "<td>" +
+          paciente.fechaUltimaVisita +
+          "</td>" +
+          "<td>" +
+          paciente.procedimiento +
+          "</td>";
+        tabla.appendChild(fila);
+      });
+    } else {
+      alert("Ningun procedimiento coincide con lo introducido");
+    }
+  }
 }
 
 //ELIMINAR PACIENTE

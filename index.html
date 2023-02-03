@@ -94,6 +94,7 @@
           type="date"
           id="input-fecha-ultima-visita"
           name="fecha-ultima-visita"
+          onchange="validacionFecha()"
         />
       </div>
       <div>
@@ -137,7 +138,7 @@
     <h2>Consultar paciente por apellido</h2>
     <form id="form-get-patient">
       <div>
-        <label for="input-id-get">Nombre:</label>
+        <label for="input-id-get">Apellido paterno:</label>
         <input style="width: 33%" type="text" id="input-get-nombre" name="id" />
       </div>
       <input
