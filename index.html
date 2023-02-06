@@ -3,235 +3,171 @@
   <head>
     <meta charset="UTF-8" />
     <script src="main.js"></script>
+    <link rel="stylesheet" type="text/css" href="styles.css" />
     <title>Agenda de Dentista</title>
-    <style>
-      /* Estilos CSS para la página */
-      body {
-        background: papayawhip;
-      }
-      .container {
-        width: 800px;
-        margin: 0 auto;
-      }
-      table {
-        border-collapse: collapse;
-        width: 100%;
-      }
-      th,
-      td {
-        border: 1px solid #ddd;
-        padding: 8px;
-        text-align: left;
-      }
-      th {
-        background-color: #ddd;
-      }
-      input[type="text"],
-      select {
-        width: 100%;
-        padding: 12px;
-        margin: 8px 0;
-        box-sizing: border-box;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-      }
-      input[type="button"] {
-        width: 100%;
-        background-color: #4caf50;
-        color: white;
-        padding: 14px 20px;
-        margin: 8px 0;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-      }
-      input[type="button"]:hover {
-        background-color: #3e8e41;
-      }
-    </style>
   </head>
   <body>
-    <h1>Agenda del Dentista</h1>
+    <div class="contenedor">
+      <h1>Agenda del Dentista</h1>
 
-    <h2>Ingresar nuevo paciente</h2>
-    <form id="form-add-patient">
-      <div>
-        <label for="input-id">ID:</label>
-        <input style="width: 33%" type="text" id="input-id" name="id" />
+      <!--SECCION DE AGREGAR PACIENTE-->
+      <div class="seccionAgregarPaciente">
+        <h2>Ingresar nuevo paciente</h2>
+        <div class="areaIngresarDatosPaciente">
+          <form id="form-add-patient">
+            <div>
+              <label for="input-id">ID:</label>
+              <input type="text" id="input-id" name="id" />
+            </div>
+            <div>
+              <label for="input-nombre">Nombre:</label>
+              <input type="text" id="input-nombre" name="nombre" />
+            </div>
+            <div>
+              <label for="input-apellidop">Apellido Paterno:</label>
+              <input type="text" id="input-apellidop" name="Apellido paterno" />
+            </div>
+            <div>
+              <label for="input-apellidom">Apellido Materno:</label>
+              <input type="text" id="input-apellidom" name="Apellido materno" />
+            </div>
+            <div>
+              <label for="input-edad">Edad:</label>
+              <input type="number" id="input-edad" name="edad" />
+            </div>
+            <div>
+              <label for="input-fecha-ultima-visita"
+                >Fecha de la última visita:</label
+              >
+              <input
+                type="date"
+                id="input-fecha-ultima-visita"
+                name="fecha-ultima-visita"
+                onchange="validacionFecha()"
+              />
+            </div>
+            <div>
+              <label for="input-procedimiento">Procedimiento:</label>
+              <textarea
+                id="input-procedimiento"
+                name="procedimiento"
+              ></textarea>
+            </div>
+            <input
+              id="input-agregar-button"
+              type="button"
+              value="Agregar paciente"
+              onclick="agregarPaciente()"
+            />
+          </form>
+        </div>
+        <div class="areaTablaPacientes">
+          <h2>Mostrar pacientes</h2>
+          <table id="tabla-pacientes">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Apellido paterno</th>
+                <th>Apellido materno</th>
+                <th>Nombre</th>
+                <th>Edad</th>
+                <th>Fecha de la última visita</th>
+                <th>Procedimiento</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="tbody-patients"></tbody>
+          </table>
+        </div>
       </div>
-      <div>
-        <label for="input-nombre">Nombre:</label>
-        <input style="width: 33%" type="text" id="input-nombre" name="nombre" />
+
+      <!--SECCION DE CONSULTAR PACIENTE POR APELLIDO-->
+      <div class="seccionConsultarPacienteApellido">
+        <h2>Consultar paciente</h2>
+        <div class="areaIngresarApellido">
+          <form id="form-get-patient">
+            <div>
+              <label for="input-id-get">Apellido paterno:</label>
+              <input type="text" id="input-get-apellido" name="id" />
+            </div>
+            <input
+              type="button"
+              value="Consultar paciente"
+              onclick="mostrarPacientesPorApellido()"
+            />
+          </form>
+        </div>
+        <div class="areaMostrarPacienteApellido">
+          <table id="tabla-pacientes-apellido">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Apellido paterno</th>
+                <th>Apellido materno</th>
+                <th>Nombre</th>
+                <th>Edad</th>
+                <th>Fecha de la última visita</th>
+                <th>Procedimiento</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="tbody-patients"></tbody>
+          </table>
+        </div>
       </div>
-      <div>
-        <label for="input-apellidop">Apellido Paterno:</label>
-        <input
-          style="width: 33%"
-          type="text"
-          id="input-apellidop"
-          name="Apellido paterno"
-        />
+
+      <!--SECCION DE CONSULTAR PACIENTE POR PROCEDIMIENTO-->
+      <div class="seccionConsultarPacienteProcedimiento">
+        <h2>Buscar pacientes por procedimiento</h2>
+        <div class="areaIngresarProcedimiento">
+          <form id="form-search-patient">
+            <div>
+              <label for="input-procedimiento-search">Procedimiento:</label>
+              <input
+                type="text"
+                id="input-procedimiento-search"
+                name="procedimiento"
+              />
+            </div>
+            <input
+              type="button"
+              value="Consultar paciente"
+              onclick="mostrarPacientesPorProcedimiento()"
+            />
+          </form>
+        </div>
+        <div class="areaMostrarPacienteProcedimiento">
+          <table id="tabla-pacientes-procedimiento">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Apellido paterno</th>
+                <th>Apellido materno</th>
+                <th>Nombre</th>
+                <th>Edad</th>
+                <th>Fecha de la última visita</th>
+                <th>Procedimiento</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="tbody-patients"></tbody>
+          </table>
+        </div>
       </div>
-      <div>
-        <label for="input-apellidom">Apellido Materno:</label>
-        <input
-          style="width: 33%"
-          type="text"
-          id="input-apellidom"
-          name="Apellido materno"
-        />
+
+      <!--SECCION DE ELIMINAR PACIENTE-->
+      <div class="seccionEliminarPaciente">
+        <h2>Eliminar paciente</h2>
+          <form>
+            <label for="idPaciente">ID del paciente:</label>
+            <input id="input-id-eliminar" type="text" id="idPaciente" />
+            <input
+              type="button"
+              value="Eliminar paciente"
+              onclick="eliminarPaciente()"
+            />
+          </form>
       </div>
-      <div>
-        <label for="input-edad">Edad:</label>
-        <input type="number" id="input-edad" name="edad" />
-      </div>
-      <div>
-        <br />
-        <label for="input-fecha-ultima-visita"
-          >Fecha de la última visita:</label
-        >
-        <input
-          type="date"
-          id="input-fecha-ultima-visita"
-          name="fecha-ultima-visita"
-        />
-      </div>
-      <div>
-        <br />
-        <label for="input-procedimiento">Procedimiento:</label>
-        <textarea id="input-procedimiento" name="procedimiento"></textarea>
-      </div>
-      <input
-        id="input-agregar-button"
-        style="width: 33%"
-        type="button"
-        value="Agregar paciente"
-        onclick="agregarPaciente()"
-      />
-    </form>
-
-    <h2>Pacientes</h2>
-    <table id="tabla-pacientes">
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>Apellido paterno</th>
-          <th>Apellido materno</th>
-          <th>Nombre</th>
-          <th>Edad</th>
-          <th>Fecha de la última visita</th>
-          <th>Procedimiento</th>
-          <th></th>
-        </tr>
-      </thead>
-      <tbody id="tbody-patients"></tbody>
-    </table>
-
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-
-    <h2>Consultar paciente</h2>
-    <form id="form-get-patient">
-      <div>
-        <label for="input-id-get">ID:</label>
-        <input style="width: 33%" type="text" id="input-id-get" name="id" />
-      </div>
-      <input
-        style="width: 33%"
-        type="button"
-        value="Consultar paciente"
-        onclick="mostrarPacientesPorId()"
-      />
-    </form>
-
-    <h2>Pacientes por búsqueda específica de ID</h2>
-    <table id="tabla-pacientes-id">
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>Apellido paterno</th>
-          <th>Apellido materno</th>
-          <th>Nombre</th>
-          <th>Edad</th>
-          <th>Fecha de la última visita</th>
-          <th>Procedimiento</th>
-          <th></th>
-        </tr>
-      </thead>
-      <tbody id="tbody-patients"></tbody>
-    </table>
-
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-
-    <h2>Buscar pacientes por procedimiento</h2>
-    <form id="form-search-patient">
-      <div>
-        <label for="input-procedimiento-search">Procedimiento:</label>
-        <input
-          style="width: 50%"
-          type="text"
-          id="input-procedimiento-search"
-          name="procedimiento"
-        />
-      </div>
-      <input
-        style="width: 33%"
-        type="button"
-        value="Consultar paciente"
-        onclick="mostrarPacientesPorProcedimiento()"
-      />
-    </form>
-
-    <h2>Pacientes por búsqueda específica de Procedimiento</h2>
-    <table id="tabla-pacientes-procedimiento">
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>Apellido paterno</th>
-          <th>Apellido materno</th>
-          <th>Nombre</th>
-          <th>Edad</th>
-          <th>Fecha de la última visita</th>
-          <th>Procedimiento</th>
-          <th></th>
-        </tr>
-      </thead>
-      <tbody id="tbody-patients"></tbody>
-    </table>
-
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-
-    <br />
-    <h2>Eliminar paciente</h2>
-    <form>
-      <label for="idPaciente">ID del paciente:</label>
-      <input
-        id="input-id-eliminar"
-        style="width: 33%"
-        type="text"
-        id="idPaciente"
-      />
-      <br /><br />
-      <input
-        style="width: 33%"
-        type="button"
-        value="Eliminar paciente"
-        onclick="eliminarPaciente()"
-      />
-    </form>
+    </div>
   </body>
 </html>

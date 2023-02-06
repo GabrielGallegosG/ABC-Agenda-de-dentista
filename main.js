@@ -1,5 +1,3 @@
-//const agregarButton = document.getElementById("input-agregar-button".value);
-
 //agregarButton.addEventListener("click", guardarPaciente);
 class Paciente {
   constructor(
@@ -22,6 +20,24 @@ class Paciente {
 }
 
 let pacientes = [];
+let permiso;
+
+//Validacion de fecha: (La fecha ingresada no debe ser posterior a hoy)
+function validacionFecha() {
+  let inputFecha = document.getElementById("input-fecha-ultima-visita");
+  let fechaActual = new Date();
+  let fechaUltimaVisita = new Date(inputFecha.value);
+
+  if (fechaUltimaVisita <= fechaActual) {
+    permiso = 1;
+  } else {
+    alert("La fecha de la ultima visita NO puede ser posterior a hoy");
+    fechaUltimaVisita = document.getElementById(
+      "input-fecha-ultima-visita"
+    ).value = "";
+    permiso = 0;
+  }
+}
 
 //AGREGAR PACIENTE
 function agregarPaciente() {
@@ -30,43 +46,99 @@ function agregarPaciente() {
   let apellidop = document.getElementById("input-apellidop").value;
   let apellidom = document.getElementById("input-apellidom").value;
   let edad = document.getElementById("input-edad").value;
+  let procedimiento = document.getElementById("input-procedimiento").value;
   let fechaUltimaVisita = document.getElementById(
     "input-fecha-ultima-visita"
   ).value;
-  let procedimiento = document.getElementById("input-procedimiento").value;
 
-  let paciente = new Paciente(
-    id,
-    nombre,
-    apellidop,
-    apellidom,
-    edad,
-    fechaUltimaVisita,
-    procedimiento
-  );
-  pacientes.push(paciente);
-  console.log("Paciente dado de alta");
+  //Validacion de ID: (El ID del nuevo paciente no tiene que estar ya registrado)
+  let pacienteExiste = false;
+  for (let i = 0; i < pacientes.length; i++) {
+    if (pacientes[i].id === id) {
+      pacienteExiste = true;
+      break;
+    }
+  }
 
-  id = document.getElementById("input-id").value = "";
-  nombre = document.getElementById("input-nombre").value = "";
-  apellidop = document.getElementById("input-apellidop").value = "";
-  apellidom = document.getElementById("input-apellidom").value = "";
-  edad = document.getElementById("input-edad").value = "";
-  fechaUltimaVisita = document.getElementById(
-    "input-fecha-ultima-visita"
-  ).value = "";
-  procedimiento = document.getElementById("input-procedimiento").value = "";
-  mostrarPacientes();
+  //Validacion de ID: (Se debe introducir un ID obligatoriamente)
+  if (id != "") {
+    //Validacion de nombre: (Se debe introducir un nombre obligatoriamente)
+    if (nombre != "") {
+      //Validacion de apellido paterno: (Se debe introducir un apellido paterno obligatoriamente)
+      if (apellidop != "") {
+        //Validacion de edad: (Se debe introducir una edad obligatoriamente)
+        if (edad != "") {
+          //Validacion de procedimiento: (Se debe introducir el procedimiento obligatoriamente)
+          if (procedimiento != "") {
+            //Validacion de fecha: (Debe ingresar una fecha obligatoriamente)
+            if (fechaUltimaVisita != "") {
+              if (permiso === 1) {
+                if (!pacienteExiste) {
+                  let paciente = new Paciente(
+                    id,
+                    nombre,
+                    apellidop,
+                    apellidom,
+                    edad,
+                    fechaUltimaVisita,
+                    procedimiento
+                  );
+                  pacientes.push(paciente);
+                  console.log("Paciente dado de alta");
+
+                  id = document.getElementById("input-id").value = "";
+                  nombre = document.getElementById("input-nombre").value = "";
+                  apellidop = document.getElementById("input-apellidop").value =
+                    "";
+                  apellidom = document.getElementById("input-apellidom").value =
+                    "";
+                  edad = document.getElementById("input-edad").value = "";
+                  fechaUltimaVisita = document.getElementById(
+                    "input-fecha-ultima-visita"
+                  ).value = "";
+                  procedimiento = document.getElementById(
+                    "input-procedimiento"
+                  ).value = "";
+                  mostrarPacientes();
+                } else {
+                  alert(
+                    "El ID que intenta registrar ya existe, ingrese otro ID"
+                  );
+                }
+              }
+            } else {
+              alert("Ingrese la fecha de la ultima visita");
+            }
+          } else {
+            alert("Se debe introducir el procedimiento obligatoriamente");
+          }
+        } else {
+          alert("No se ha introducido la edad del paciente");
+        }
+      } else {
+        alert("No se ha introducido un apellido paterno");
+      }
+    } else {
+      alert("No se ha introducido un nombre");
+    }
+  } else {
+    alert("No se ha introducido un ID");
+  }
 }
 
 //MOSTRAR PACIENTES
 function mostrarPacientes() {
   // Obtiene el elemento HTML donde se mostrará la tabla
   let tabla = document.getElementById("tabla-pacientes");
+  let filas = tabla.getElementsByTagName("tr");
 
-  while (tabla.firstChild) {
-    tabla.removeChild(tabla.firstChild);
+  while (filas.length > 1) {
+    tabla.deleteRow(1);
   }
+
+  // while (tabla.firstChild) {
+  //   tabla.removeChild(tabla.firstChild);
+  // }
   // Crea una fila para cada paciente en el array
   for (let paciente of pacientes) {
     let fila = document.createElement("tr");
@@ -105,63 +177,21 @@ function mostrarPacientes() {
   }
 }
 
-//CONSULTAR PACIENTE POR ID
-function mostrarPacientesPorId() {
-  let id = document.getElementById("input-id-get").value;
+//CONSULTAR PACIENTE POR APELLIDO
+function mostrarPacientesPorApellido() {
+  let inputApellido = document.getElementById("input-get-apellido").value;
 
   let pacientesFiltrados = pacientes.filter(function (paciente) {
-    return paciente.id === id;
+    let apellidos = paciente.apellidop + " " + paciente.apellidom;
+    return (paciente.apellidop.toLowerCase() === inputApellido.toLowerCase()) || (apellidos.toLowerCase() === inputApellido.toLowerCase()) || (paciente.nombre.toLowerCase() === inputApellido.toLowerCase());
   });
 
-  let tabla = document.getElementById("tabla-pacientes-id");
+  let tabla = document.getElementById("tabla-pacientes-apellido");
+  let filas = tabla.getElementsByTagName("tr");
 
-  // Limpiamos la tabla
-  tabla.innerHTML = "";
-
-  // Agregamos la cabecera de la tabla
-  let cabecera = document.createElement("tr");
-  cabecera.innerHTML =
-  "<th>ID</th><th>Apellido paterno</th><th>Apellido materno</th><th>Nombre</th><th>Edad</th><th>Fecha última visita</th><th>Procedimiento</th>";
-  tabla.appendChild(cabecera);
-
-  // Agregamos las filas de la tabla
-  pacientesFiltrados.forEach(function (paciente) {
-    let fila = document.createElement("tr");
-    fila.innerHTML =
-      "<td>" +
-      paciente.id +
-      "</td>" +
-      "<td>" +
-      paciente.apellidop +
-      "</td>" +
-      "<td>" +
-      paciente.apellidom +
-      "</td>" +
-      "<td>" +
-      paciente.nombre +
-      "</td>" +
-      "<td>" +
-      paciente.edad +
-      "</td>" +
-      "<td>" +
-      paciente.fechaUltimaVisita +
-      "</td>" +
-      "<td>" +
-      paciente.procedimiento +
-      "</td>";
-    tabla.appendChild(fila);
-  });
-}
-
-//MOSTRAR PACIENTES POR PROCEDIMIENTO
-function mostrarPacientesPorProcedimiento() {
-  let procedimiento = document.getElementById("input-procedimiento-search").value;
-
-  let pacientesFiltrados = pacientes.filter(function (paciente) {
-    return paciente.procedimiento === procedimiento;
-  });
-
-  let tabla = document.getElementById("tabla-pacientes-procedimiento");
+  while (filas.length > 1) {
+    tabla.deleteRow(1);
+  }
 
   // Limpiamos la tabla
   tabla.innerHTML = "";
@@ -199,6 +229,76 @@ function mostrarPacientesPorProcedimiento() {
       "</td>";
     tabla.appendChild(fila);
   });
+
+  // Limpiamos el input
+  inputApellido = document.getElementById("input-get-apellido").value = "";
+}
+
+//MOSTRAR PACIENTES POR PROCEDIMIENTO
+function mostrarPacientesPorProcedimiento() {
+  let procedimiento = document.getElementById(
+    "input-procedimiento-search"
+  ).value;
+
+  let pacientesFiltrados = pacientes.filter(function (paciente) {
+    return (
+      paciente.procedimiento
+        .toLowerCase()
+        .indexOf(procedimiento.toLowerCase()) !== -1
+    );
+  });
+
+  let tabla = document.getElementById("tabla-pacientes-procedimiento");
+  let filas = tabla.getElementsByTagName("tr");
+
+  while (filas.length > 1) {
+    tabla.deleteRow(1);
+  }
+
+  // Limpiamos la tabla
+  tabla.innerHTML = "";
+
+  // Agregamos la cabecera de la tabla
+  let cabecera = document.createElement("tr");
+  cabecera.innerHTML =
+    "<th>ID</th><th>Apellido paterno</th><th>Apellido materno</th><th>Nombre</th><th>Edad</th><th>Fecha última visita</th><th>Procedimiento</th>";
+  tabla.appendChild(cabecera);
+
+  // Agregamos las filas de la tabla
+  if (procedimiento != "") {
+    pacientesFiltrados.forEach(function (paciente) {
+      let fila = document.createElement("tr");
+      fila.innerHTML =
+        "<td>" +
+        paciente.id +
+        "</td>" +
+        "<td>" +
+        paciente.apellidop +
+        "</td>" +
+        "<td>" +
+        paciente.apellidom +
+        "</td>" +
+        "<td>" +
+        paciente.nombre +
+        "</td>" +
+        "<td>" +
+        paciente.edad +
+        "</td>" +
+        "<td>" +
+        paciente.fechaUltimaVisita +
+        "</td>" +
+        "<td>" +
+        paciente.procedimiento +
+        "</td>";
+      tabla.appendChild(fila);
+    });
+
+    procedimiento = document.getElementById(
+      "input-procedimiento-search"
+    ).value = "";
+  }
+
+  //alert("Ningun procedimiento coincide con lo introducido");
 }
 
 //ELIMINAR PACIENTE
@@ -212,4 +312,6 @@ function eliminarPaciente() {
 
   idEliminar = document.getElementById("input-id-eliminar").value = "";
   mostrarPacientes();
+  mostrarPacientesPorApellido();
+  mostrarPacientesPorProcedimiento();
 }

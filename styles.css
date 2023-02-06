@@ -1,0 +1,110 @@
+/* Estilos CSS para la página */
+body {
+  margin: 0;
+}
+.contenedor {
+  margin: 0;
+  background: MediumTurquoise;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  justify-content: center;
+  font-weight: bold;
+}
+.contenedor div {
+  margin-top: 10px;
+}
+.seccionAgregarPaciente {
+  background: LightYellow;
+  border-radius: 25px;
+  margin-left: 2%;
+  margin-right: 2%;
+}
+.areaIngresarDatosPaciente {
+  margin-left: 20%;
+  margin-right: 20%;
+}
+.areaTablaPacientes {
+  margin-bottom: 35px;
+}
+.seccionConsultarPacienteApellido {
+  background: LightYellow;
+  border-radius: 25px;
+  margin-left: 2%;
+  margin-right: 2%;
+}
+.areaIngresarApellido {
+  margin-left: 20%;
+  margin-right: 20%;
+}
+.areaMostrarPacienteApellido {
+  margin-bottom: 35px;
+}
+.seccionConsultarPacienteProcedimiento {
+  background: LightYellow;
+  border-radius: 25px;
+  margin-left: 2%;
+  margin-right: 2%;
+}
+.areaIngresarProcedimiento {
+  margin-left: 20%;
+  margin-right: 20%;
+}
+.areaMostrarPacienteProcedimiento {
+  margin-bottom: 35px;
+}
+.seccionEliminarPaciente {
+  background: LightYellow;
+  border-radius: 25px;
+  margin-left: 2%;
+  margin-right: 2%;
+}
+.seccionEliminarPaciente form {
+    margin-left: 20%;
+  margin-right: 20%;
+}
+.seccionEliminarPaciente {
+  margin-bottom: 15px;
+}
+.seccionEliminarPaciente form {
+  margin-bottom: 20px;
+}
+.container {
+  width: 800px;
+  margin: 0 auto;
+}
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+th,
+td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+th {
+  background-color: #ddd;
+}
+input[type="text"],
+select {
+  width: 100%;
+  padding: 12px;
+  margin: 8px 0;
+  box-sizing: border-box;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+input[type="button"] {
+  width: 100%;
+  background-color: #4caf50;
+  color: white;
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+input[type="button"]:hover {
+  background-color: #3e8e41;
+}
