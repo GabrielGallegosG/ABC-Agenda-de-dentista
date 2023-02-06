@@ -182,7 +182,8 @@ function mostrarPacientesPorApellido() {
   let inputApellido = document.getElementById("input-get-apellido").value;
 
   let pacientesFiltrados = pacientes.filter(function (paciente) {
-    return paciente.apellidop.toLowerCase() === inputApellido.toLowerCase();
+    let apellidos = paciente.apellidop + " " + paciente.apellidom;
+    return (paciente.apellidop.toLowerCase() === inputApellido.toLowerCase()) || (apellidos.toLowerCase() === inputApellido.toLowerCase()) || (paciente.nombre.toLowerCase() === inputApellido.toLowerCase());
   });
 
   let tabla = document.getElementById("tabla-pacientes-apellido");
